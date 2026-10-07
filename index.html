@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mengenal Wilayah NKRI - Kelas 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --tertiary: #ffe66d;
+            --text-main: #2f3542;
+            --text-light: #57606f;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--tertiary);
+            color: #333;
+            padding: 20px;
+            font-weight: 900;
+            border-radius: 50%;
+            transform: rotate(-15deg);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            border-left: 8px solid var(--secondary);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+
+        .card.card-1 { border-color: #ff9f43; }
+        .card.card-2 { border-color: #10ac84; }
+        .card.card-3 { border-color: #5f27cd; }
+        .card.card-4 { border-color: #ee5253; }
+        .card.card-5 { border-color: #ff4757; background-color: #fff4f4; }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: block;
+        }
+
+        .card h2 {
+            font-size: 22px;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .card p, .card ul {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .card ul {
+            padding-left: 20px;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background-color: var(--tertiary);
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+
+        .quiz-section {
+            background: #fff;
+            border-radius: 25px;
+            padding: 30px 20px;
+            margin-top: 40px;
+            border: 4px dashed var(--secondary);
+        }
+
+        .quiz-section h2 {
+            color: var(--secondary);
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dfe4ea;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Nunito', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dfe4ea;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Nunito', sans-serif;
+            transition: border-color 0.3s;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .hots-section {
+            border-color: #ff9f43;
+            background-color: #fffaf0;
+            margin-top: 20px;
+        }
+        
+        .hots-section h2 {
+            color: #ff9f43;
+        }
+
+        button.btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 0 #d63031;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        button.btn-submit:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #d63031;
+        }
+
+        .mascot {
+            text-align: center;
+            margin: -20px 0 20px 0;
+            font-size: 60px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-15px);}
+            60% {transform: translateY(-7px);}
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <div class="badge">Kelas 6</div>
+            <div class="mascot">🇮🇩</div>
+            <h1>Mengenal Tempat Tinggalku</h1>
+            <div class="subtitle">Dari Desaku Sampai Menjadi Indonesia!</div>
+        </header>
+
+        <div class="card card-1">
+            <span class="card-icon">🏡</span>
+            <h2>1. Rumah Kita Ada di Mana?</h2>
+            <p>Pasti kalian punya alamat rumah, kan? Di alamatmu pasti ada nama desa atau kelurahannya.</p>
+            <ul>
+                <li><span class="highlight">Desa/Kelurahan</span> adalah wilayah terkecil yang dipimpin oleh Kepala Desa atau Lurah.</li>
+                <li>Gabungan dari beberapa desa/kelurahan membentuk <span class="highlight">Kecamatan</span>, yang dipimpin oleh seorang Camat.</li>
+            </ul>
+        </div>
+
+        <div class="card card-2">
+            <span class="card-icon">🏙️</span>
+            <h2>2. Naik Tingkat: Kabupaten/Kota</h2>
+            <p>Beberapa kecamatan yang bergabung akan menjadi wilayah yang lebih besar, yaitu Kabupaten atau Kota.</p>
+            <ul>
+                <li><span class="highlight">Kabupaten</span> dipimpin oleh <strong>Bupati</strong>. Biasanya memiliki banyak daerah pertanian atau alam terbuka.</li>
+                <li><span class="highlight">Kota</span> dipimpin oleh <strong>Wali Kota</strong>. Biasanya lebih padat penduduknya dan banyak gedung perkantoran.</li>
+            </ul>
+        </div>
+
+        <div class="card card-3">
+            <span class="card-icon">🗺️</span>
+            <h2>3. Semakin Luas: Provinsi</h2>
+            <p>Jika kabupaten dan kota dikumpulkan, terbentuklah sebuah <span class="highlight">Provinsi</span>. Provinsi adalah wilayah yang sangat luas.</p>
+            <ul>
+                <li>Provinsi dipimpin oleh seorang <strong>Gubernur</strong>.</li>
+                <li>Saat ini, Indonesia memiliki 38 Provinsi! Banyak sekali, ya? Setiap provinsi punya keunikan masing-masing.</li>
+            </ul>
+        </div>
+
+        <div class="card card-4">
+            <span class="card-icon">🦅</span>
+            <h2>4. Menjadi Satu Kesatuan: NKRI</h2>
+            <p>Dari ujung Barat (Sabang) sampai ujung Timur (Merauke), jika semua provinsi disatukan, jadilah <span class="highlight">Negara Kesatuan Republik Indonesia (NKRI)</span>.</p>
+            <p>Negara kita dipimpin oleh <strong>Presiden</strong>. Walaupun kita berbeda daerah, bahasa, dan budaya, kita tetap bersaudara. Sesuai dengan semboyan kita: <strong>Bhinneka Tunggal Ika!</strong></p>
+        </div>
+
+        <div class="card card-5">
+            <span class="card-icon">⭐</span>
+            <h2>5. Aksi Nyataku Sehari-hari! (Pembiasaan)</h2>
+            <p>Sebagai siswa kelas 6, kita tidak hanya sekadar <em>tahu</em> nama-nama daerah, tapi harus <strong>mempraktikkan</strong> sikap cinta tanah air di kehidupan sehari-hari! Apa saja contoh pembiasaannya?</p>
+            <ul>
+                <li><strong>Di Desa/Kelurahan:</strong> Ikut serta jika ada kerja bakti membersihkan lingkungan, dan ramah menyapa tetangga.</li>
+                <li><strong>Di Kabupaten/Kota:</strong> Menaati tata tertib saat berada di fasilitas umum, dan tidak merusak fasilitas kota (seperti taman kota).</li>
+                <li><strong>Untuk Provinsi & NKRI:</strong> Menghargai teman yang berasal dari suku atau provinsi berbeda, bangga menggunakan produk buatan Indonesia, dan rukun dengan siapa saja.</li>
+            </ul>
+        </div>
+
+        <div class="quiz-section">
+            <h2>📝 Mari Berlatih!</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: var(--text-light); font-weight: bold; background: #fff3cd; padding: 10px; border-radius: 10px;">✍️ Siapkan buku tulismu! Cari jawabannya pada teks bacaan di atas, ya!</p>
+            
+            <ol style="padding-left: 20px; color: var(--text-main); font-weight: 700; line-height: 1.8;">
+                <li style="margin-bottom: 15px;">Sesuai bacaan <strong>nomor 1</strong>, wilayah terkecil dipimpin oleh Lurah atau Kepala...</li>
+                <li style="margin-bottom: 15px;">Sesuai bacaan <strong>nomor 2</strong>, Kabupaten dipimpin oleh seorang...</li>
+                <li style="margin-bottom: 15px;">Sesuai bacaan <strong>nomor 3</strong>, Provinsi dipimpin oleh seorang...</li>
+                <li style="margin-bottom: 15px;">Sekarang coba tanya pada gurumu atau orang tuamu, apa nama Provinsi tempat kamu tinggal saat ini?</li>
+                <li style="margin-bottom: 15px;">Sesuai bacaan <strong>nomor 5</strong>, sebutkan SATU contoh tindakan yang bisa kamu biasakan di desa/kelurahanmu!</li>
+            </ol>
+        </div>
+
+        <div class="quiz-section hots-section">
+            <h2>🧠 Tantangan Berpikir (Soal HOTS)</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: var(--text-light); font-weight: bold;">Tidak ada jawaban salah jika kamu berani berpendapat. Tuliskan jawabanmu dengan santai memakai bahasamu sendiri di buku tulismu!</p>
+            
+            <ol style="padding-left: 20px; color: var(--text-main); font-weight: 700; line-height: 1.8;">
+                <li style="margin-bottom: 15px;">Indonesia itu sangat luas. Menurutmu, apa jadinya jika negara kita <strong>tidak</strong> dibagi-bagi menjadi beberapa provinsi dan kabupaten?</li>
+                <li style="margin-bottom: 15px;">Ada teman baru di kelasmu yang pindah dari provinsi lain. Dia sering dijauhi karena logat bicaranya berbeda. Sebagai anak Indonesia yang baik, apa tindakan yang harus kamu lakukan?</li>
+                <li style="margin-bottom: 15px;">Bayangkan kamu menjadi Wali Kota / Bupati hari ini. Sebutkan SATU masalah di kotamu (misal: banjir, macet, atau banyak sampah), dan buatlah SATU aturan baru untuk menyelesaikan masalah itu!</li>
+                <li style="margin-bottom: 15px;">Gubernur memimpin wilayah yang sangat luas, sedangkan Kepala Desa memimpin wilayah yang kecil. Menurutmu, siapa yang akan lebih cepat tahu jika ada rumah warga yang roboh? Berikan alasanmu!</li>
+                <li style="margin-bottom: 15px;">Jika warga di desamu suka bertengkar dan tidak mau ikut kerja bakti, apakah hal itu bisa mengganggu persatuan Negara Indonesia (NKRI)? Jelaskan alasanmu!</li>
+            </ol>
+        </div>
+
+    </div>
+
+</body>
+</html>
