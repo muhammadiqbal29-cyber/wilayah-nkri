@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS - Wilayah NKRI | Kelas 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e17055;
+            --secondary: #0984e3;
+            --accent: #ffeaa7;
+            --success: #00b894;
+            --bg: #0d1117;
+            --card: #161b22;
+            --card2: #21262d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 720px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            padding: 28px 20px;
+            background: linear-gradient(135deg, #e17055, #d63031);
+            border-radius: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(225,112,85,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '✏️';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.08;
+            right: -10px;
+            top: -10px;
+        }
+
+        .badge-kelas {
+            display: inline-block;
+            background: var(--accent);
+            color: #333;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        header h1 { font-size: 28px; font-weight: 900; color: #fff; }
+        header p { color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 6px; font-weight: 700; }
+
+        .score-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--card);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card2);
+        }
+
+        .score-item { text-align: center; }
+        .score-item .val { font-size: 26px; font-weight: 900; color: var(--primary); }
+        .score-item .lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .tts-section {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card2);
+        }
+
+        .tts-section h2 {
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tts-section h2 span.dir-badge {
+            background: var(--primary);
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .tts-section h2 span.dir-badge.mendatar {
+            background: var(--secondary);
+        }
+
+        /* TTS GRID */
+        .crossword-wrap {
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        #crossword-grid {
+            display: inline-grid;
+            gap: 3px;
+            background: #333;
+            padding: 3px;
+            border-radius: 10px;
+        }
+
+        .cw-cell {
+            width: 42px;
+            height: 42px;
+            position: relative;
+        }
+
+        .cw-cell.black {
+            background: #1a1a2e;
+            border-radius: 4px;
+        }
+
+        .cw-cell input {
+            width: 100%;
+            height: 100%;
+            background: var(--card2);
+            border: 2px solid #444;
+            border-radius: 4px;
+            color: var(--text);
+            font-family: 'Nunito', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            text-align: center;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            outline: none;
+        }
+
+        .cw-cell input:focus {
+            border-color: var(--primary);
+            background: rgba(225,112,85,0.15);
+        }
+
+        .cw-cell input.correct {
+            border-color: var(--success);
+            background: rgba(0,184,148,0.2);
+            color: var(--success);
+        }
+
+        .cw-cell input.wrong {
+            border-color: #e74c3c;
+            background: rgba(231,76,60,0.15);
+            animation: shake 0.3s;
+        }
+
+        .cw-cell input.highlighted {
+            background: rgba(9,132,227,0.2);
+            border-color: var(--secondary);
+        }
+
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}
+            25%{transform:translateX(-4px)}
+            75%{transform:translateX(4px)}
+        }
+
+        .cell-num {
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            font-size: 9px;
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .clue-list {
+            list-style: none;
+        }
+
+        .clue-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            background: var(--card2);
+        }
+
+        .clue-item:hover { background: rgba(225,112,85,0.1); }
+        .clue-item.active { background: rgba(9,132,227,0.15); border: 1px solid var(--secondary); }
+        .clue-item.solved { background: rgba(0,184,148,0.1); }
+
+        .clue-num {
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .clue-num.mendatar { background: var(--secondary); }
+
+        .clue-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #ccc;
+        }
+
+        .clue-text strong { color: var(--text); }
+        .clue-item.solved .clue-text { text-decoration: line-through; opacity: 0.6; }
+
+        .btn-check {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), #d63031);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            box-shadow: 0 4px 15px rgba(225,112,85,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .btn-check:hover { transform: translateY(-2px); }
+        .btn-check:active { transform: translateY(0); }
+
+        .btn-reset {
+            width: 100%;
+            padding: 14px;
+            background: var(--card2);
+            color: var(--muted);
+            border: 2px solid #444;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover { color: var(--text); border-color: var(--muted); }
+
+        .win-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .win-overlay.show { display: flex; }
+
+        .win-box {
+            background: linear-gradient(135deg, var(--card), var(--card2));
+            border-radius: 28px;
+            padding: 40px 30px;
+            border: 3px solid var(--primary);
+            max-width: 350px;
+            width: 100%;
+            text-align: center;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .win-emoji { font-size: 70px; margin-bottom: 15px; }
+        .win-title { font-size: 28px; font-weight: 900; color: var(--primary); margin-bottom: 10px; }
+        .win-msg { color: #ccc; font-size: 15px; margin-bottom: 25px; line-height: 1.5; }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            animation: fall linear forwards;
+            z-index: 99;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .cw-cell { width: 34px; height: 34px; }
+            .cw-cell input { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="badge-kelas">🎮 Game 2 dari 3 | Kelas 6 PKn</div>
+        <h1>✏️ Teka-Teki Silang</h1>
+        <p>Isi kotak berdasarkan petunjuk seputar Wilayah NKRI!</p>
+    </header>
+
+    <div class="score-bar">
+        <div class="score-item">
+            <div class="val" id="solved-count">0</div>
+            <div class="lbl">Terjawab</div>
+        </div>
+        <div class="score-item">
+            <div class="val" id="total-clues">12</div>
+            <div class="lbl">Total Soal</div>
+        </div>
+        <div class="score-item">
+            <div class="val" id="score-val">0</div>
+            <div class="lbl">Skor</div>
+        </div>
+    </div>
+
+    <div class="crossword-wrap">
+        <div id="crossword-grid"></div>
+    </div>
+
+    <div class="tts-section">
+        <h2><span class="dir-badge">↓</span> Menurun</h2>
+        <ul class="clue-list" id="clues-down"></ul>
+    </div>
+
+    <div class="tts-section">
+        <h2><span class="dir-badge mendatar">→</span> Mendatar</h2>
+        <ul class="clue-list" id="clues-across"></ul>
+    </div>
+
+    <button class="btn-check" onclick="checkAll()">✅ Cek Semua Jawaban</button>
+    <button class="btn-reset" onclick="resetAll()">🔄 Mulai Ulang</button>
+</div>
+
+<div class="win-overlay" id="win-overlay">
+    <div class="win-box">
+        <div class="win-emoji">🏆</div>
+        <div class="win-title">SEMPURNA!</div>
+        <div class="win-msg">Kamu berhasil mengisi semua TTS dengan benar! Hebat! Kamu sudah paham tentang Wilayah NKRI!</div>
+        <button class="btn-check" onclick="resetAll(); document.getElementById('win-overlay').classList.remove('show')">🎮 Main Lagi</button>
+    </div>
+</div>
+
+<script>
+// Grid 13x13
+// Answers and positions carefully designed
+const COLS = 13;
+const ROWS = 13;
+
+// Clues: { num, dir:'A'|'D', row, col, answer, clue }
+const CLUES = [
+    // MENDATAR (Across)
+    { num:1,  dir:'A', row:0, col:0,  answer:'DESA',      clue:'Wilayah terkecil yang dipimpin Kepala Desa' },
+    { num:3,  dir:'A', row:2, col:0,  answer:'BUPATI',    clue:'Pemimpin wilayah Kabupaten' },
+    { num:5,  dir:'A', row:4, col:2,  answer:'GUBERNUR',  clue:'Pemimpin wilayah Provinsi' },
+    { num:7,  dir:'A', row:6, col:0,  answer:'PROVINSI',  clue:'Wilayah gabungan beberapa Kabupaten/Kota' },
+    { num:9,  dir:'A', row:8, col:3,  answer:'NKRI',      clue:'Singkatan nama negara kita tercinta' },
+    { num:11, dir:'A', row:10, col:1, answer:'LURAH',     clue:'Pemimpin wilayah Kelurahan' },
+    { num:12, dir:'A', row:12, col:0, answer:'BHINNEKA',  clue:'Kata pertama semboyan bangsa: ___ Tunggal Ika' },
+    // MENURUN (Down)
+    { num:1,  dir:'D', row:0, col:0,  answer:'DAERAH',    clue:'Wilayah tertentu, contoh: provinsi atau kabupaten' },
+    { num:2,  dir:'D', row:0, col:3,  answer:'SABANG',    clue:'Kota paling ujung Barat Indonesia' },
+    { num:4,  dir:'D', row:2, col:5,  answer:'PRESIDEN',  clue:'Pemimpin negara Indonesia' },
+    { num:6,  dir:'D', row:4, col:9,  answer:'RUKUN',     clue:'Hidup ___ antar sesama warga negara' },
+    { num:8,  dir:'D', row:6, col:6,  answer:'WALIKOTA',  clue:'Pemimpin wilayah Kota' },
+];
+
+let solvedClues = new Set();
+let score = 0;
+let gridData = [];
+
+function buildGridData() {
+    gridData = Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => ({
+        black: true, letter: '', answer: '', cellNums: [], inputs: [], clueRefs: []
+    })));
+
+    CLUES.forEach(clue => {
+        for (let i = 0; i < clue.answer.length; i++) {
+            const r = clue.dir === 'A' ? clue.row : clue.row + i;
+            const c = clue.dir === 'A' ? clue.col + i : clue.col;
+            if (r < ROWS && c < COLS) {
+                gridData[r][c].black = false;
+                gridData[r][c].answer = clue.answer[i];
+            }
+        }
+        gridData[clue.row][clue.col].cellNums.push(clue.num + (clue.dir === 'D' ? '↓' : '→'));
+    });
+}
+
+function renderCrossword() {
+    buildGridData();
+    const grid = document.getElementById('crossword-grid');
+    grid.style.gridTemplateColumns = `repeat(${COLS}, 42px)`;
+    grid.innerHTML = '';
+
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'cw-cell' + (gridData[r][c].black ? ' black' : '');
+
+            if (!gridData[r][c].black) {
+                const nums = gridData[r][c].cellNums;
+                if (nums.length > 0) {
+                    const numEl = document.createElement('div');
+                    numEl.className = 'cell-num';
+                    numEl.textContent = nums.map(n => n.replace(/[↓→]/g,'')).join('/');
+                    cell.appendChild(numEl);
+                }
+
+                const input = document.createElement('input');
+                input.maxLength = 1;
+                input.dataset.r = r;
+                input.dataset.c = c;
+                input.id = `inp-${r}-${c}`;
+                input.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'');
+                    moveFocus(r, c);
+                });
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && !this.value) moveFocusBack(r, c);
+                    if (e.key === 'ArrowRight') moveTo(r, c+1);
+                    if (e.key === 'ArrowLeft') moveTo(r, c-1);
+                    if (e.key === 'ArrowDown') moveTo(r+1, c);
+                    if (e.key === 'ArrowUp') moveTo(r-1, c);
+                });
+                cell.appendChild(input);
+            }
+
+            grid.appendChild(cell);
+        }
+    }
+
+    document.getElementById('total-clues').textContent = CLUES.length;
+}
+
+function moveFocus(r, c) {
+    if (c + 1 < COLS && !gridData[r][c+1].black) moveTo(r, c+1);
+    else if (r + 1 < ROWS && !gridData[r+1][c].black) moveTo(r+1, c);
+}
+
+function moveFocusBack(r, c) {
+    if (c - 1 >= 0 && !gridData[r][c-1].black) moveTo(r, c-1);
+}
+
+function moveTo(r, c) {
+    if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+    if (gridData[r][c].black) return;
+    const inp = document.getElementById(`inp-${r}-${c}`);
+    if (inp) inp.focus();
+}
+
+function renderClues() {
+    const downList = document.getElementById('clues-down');
+    const acrossList = document.getElementById('clues-across');
+    downList.innerHTML = '';
+    acrossList.innerHTML = '';
+
+    CLUES.forEach(clue => {
+        const li = document.createElement('li');
+        li.className = 'clue-item';
+        li.id = `clue-${clue.dir}-${clue.num}`;
+        li.innerHTML = `
+            <div class="clue-num ${clue.dir === 'A' ? 'mendatar' : ''}">${clue.num}</div>
+            <div class="clue-text">${clue.clue} <strong>(${clue.answer.length} huruf)</strong></div>
+        `;
+        li.addEventListener('click', () => highlightClue(clue));
+
+        if (clue.dir === 'D') downList.appendChild(li);
+        else acrossList.appendChild(li);
+    });
+}
+
+function highlightClue(clue) {
+    document.querySelectorAll('.cw-cell input').forEach(i => i.classList.remove('highlighted'));
+    document.querySelectorAll('.clue-item').forEach(i => i.classList.remove('active'));
+
+    const li = document.getElementById(`clue-${clue.dir}-${clue.num}`);
+    if (li) li.classList.add('active');
+
+    for (let i = 0; i < clue.answer.length; i++) {
+        const r = clue.dir === 'A' ? clue.row : clue.row + i;
+        const c = clue.dir === 'A' ? clue.col + i : clue.col;
+        const inp = document.getElementById(`inp-${r}-${c}`);
+        if (inp) inp.classList.add('highlighted');
+    }
+
+    const firstInp = document.getElementById(`inp-${clue.row}-${clue.col}`);
+    if (firstInp) firstInp.focus();
+}
+
+function checkAll() {
+    let allCorrect = true;
+    solvedClues.clear();
+    score = 0;
+
+    CLUES.forEach(clue => {
+        let correct = true;
+        for (let i = 0; i < clue.answer.length; i++) {
+            const r = clue.dir === 'A' ? clue.row : clue.row + i;
+            const c = clue.dir === 'A' ? clue.col + i : clue.col;
+            const inp = document.getElementById(`inp-${r}-${c}`);
+            if (!inp) { correct = false; continue; }
+            const val = inp.value.toUpperCase();
+            if (val === clue.answer[i]) {
+                inp.classList.add('correct');
+                inp.classList.remove('wrong');
+            } else {
+                inp.classList.remove('correct');
+                if (val) inp.classList.add('wrong');
+                correct = false;
+            }
+        }
+
+        const li = document.getElementById(`clue-${clue.dir}-${clue.num}`);
+        if (correct) {
+            solvedClues.add(`${clue.dir}-${clue.num}`);
+            score += 100;
+            if (li) li.classList.add('solved');
+        } else {
+            allCorrect = false;
+            if (li) li.classList.remove('solved');
+        }
+    });
+
+    document.getElementById('solved-count').textContent = solvedClues.size;
+    document.getElementById('score-val').textContent = score;
+
+    if (allCorrect) setTimeout(showWin, 500);
+}
+
+function resetAll() {
+    document.querySelectorAll('.cw-cell input').forEach(inp => {
+        inp.value = '';
+        inp.classList.remove('correct','wrong','highlighted');
+    });
+    document.querySelectorAll('.clue-item').forEach(li => li.classList.remove('solved','active'));
+    solvedClues.clear();
+    score = 0;
+    document.getElementById('solved-count').textContent = 0;
+    document.getElementById('score-val').textContent = 0;
+}
+
+function showWin() {
+    spawnConfetti();
+    document.getElementById('win-overlay').classList.add('show');
+}
+
+function spawnConfetti() {
+    const colors = ['#e17055','#fdcb6e','#00b894','#0984e3','#fd79a8','#a29bfe'];
+    for (let i = 0; i < 60; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        el.style.animationDelay = Math.random() * 2 + 's';
+        el.style.width = el.style.height = (Math.random() * 10 + 5) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 5000);
+    }
+}
+
+renderCrossword();
+renderClues();
+</script>
+</body>
+</html>

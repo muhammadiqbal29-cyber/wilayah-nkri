@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sambung Kata - Wilayah NKRI | Kelas 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00b894;
+            --secondary: #6c5ce7;
+            --accent: #fdcb6e;
+            --danger: #e17055;
+            --info: #0984e3;
+            --bg: #0a0e1a;
+            --card: #12192b;
+            --card2: #1a2540;
+            --text: #e0e8ff;
+            --muted: #7a8ab0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 680px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            padding: 28px 20px;
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            border-radius: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0,184,148,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🔗';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.08;
+            right: -10px;
+            top: -10px;
+        }
+
+        .badge-kelas {
+            display: inline-block;
+            background: var(--accent);
+            color: #333;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        header h1 { font-size: 28px; font-weight: 900; color: #fff; }
+        header p { color: rgba(255,255,255,0.85); font-size: 14px; margin-top: 6px; font-weight: 700; }
+
+        .score-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--card);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card2);
+        }
+
+        .score-item { text-align: center; }
+        .score-item .val { font-size: 26px; font-weight: 900; color: var(--primary); }
+        .score-item .lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Rules Card */
+        .rules-card {
+            background: var(--card2);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .rules-card h3 {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rules-card p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* Current word display */
+        .current-word-section {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 2px solid var(--card2);
+            text-align: center;
+        }
+
+        .current-word-section .label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .current-word {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(0,184,148,0.5);
+            margin-bottom: 8px;
+        }
+
+        .start-letter {
+            font-size: 15px;
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .start-letter span {
+            background: rgba(253,203,110,0.2);
+            border: 2px solid var(--accent);
+            padding: 2px 10px;
+            border-radius: 8px;
+            letter-spacing: 2px;
+        }
+
+        /* Chain display */
+        .chain-display {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card2);
+            min-height: 60px;
+        }
+
+        .chain-display h3 {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .chain-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chain-word {
+            background: var(--card2);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .chain-word .arrow {
+            color: var(--primary);
+            font-size: 12px;
+        }
+
+        .chain-word.highlight-last {
+            background: rgba(0,184,148,0.2);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .chain-arrow {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        /* Input section */
+        .input-section {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid var(--card2);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-row input {
+            flex: 1;
+            background: var(--card2);
+            border: 2px solid #444;
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Nunito', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            text-align: center;
+            padding: 14px;
+            text-transform: uppercase;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            letter-spacing: 3px;
+        }
+
+        .input-row input:focus {
+            border-color: var(--primary);
+            background: rgba(0,184,148,0.1);
+        }
+
+        .input-row input.error {
+            border-color: var(--danger);
+            background: rgba(225,112,85,0.1);
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}
+            25%{transform:translateX(-6px)}
+            75%{transform:translateX(6px)}
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 900;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,184,148,0.4);
+            white-space: nowrap;
+        }
+
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,184,148,0.5); }
+        .btn-submit:active { transform: translateY(0); }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            text-align: center;
+            min-height: 20px;
+            transition: all 0.3s;
+        }
+
+        .feedback.ok { color: var(--primary); }
+        .feedback.err { color: var(--danger); }
+
+        /* Word bank */
+        .wordbank-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card2);
+        }
+
+        .wordbank-section h3 {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .bank-word {
+            background: var(--card2);
+            border: 2px solid #444;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .bank-word:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0,184,148,0.1);
+        }
+
+        .bank-word.used {
+            opacity: 0.3;
+            pointer-events: none;
+            text-decoration: line-through;
+        }
+
+        .progress-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card2);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: var(--card2);
+            border-radius: 20px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary), #00cec9);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        .btn-reset {
+            width: 100%;
+            padding: 14px;
+            background: var(--card2);
+            color: var(--muted);
+            border: 2px solid #444;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover { color: var(--text); border-color: var(--muted); }
+
+        .win-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .win-overlay.show { display: flex; }
+
+        .win-box {
+            background: linear-gradient(135deg, var(--card), var(--card2));
+            border-radius: 28px;
+            padding: 40px 30px;
+            border: 3px solid var(--primary);
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .win-emoji { font-size: 70px; margin-bottom: 15px; }
+        .win-title { font-size: 28px; font-weight: 900; color: var(--primary); margin-bottom: 10px; }
+        .win-msg { color: #ccc; font-size: 15px; margin-bottom: 25px; line-height: 1.5; }
+
+        .chain-display-win {
+            background: rgba(0,184,148,0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--primary);
+        }
+
+        .chain-display-win p {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 800;
+            line-height: 1.8;
+        }
+
+        .btn-submit-large {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), #00cec9);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            box-shadow: 0 4px 15px rgba(0,184,148,0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-submit-large:hover { transform: translateY(-2px); }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            animation: fall linear forwards;
+            z-index: 99;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="badge-kelas">🎮 Game 3 dari 3 | Kelas 6 PKn</div>
+        <h1>🔗 Sambung Kata</h1>
+        <p>Sambung kata-kata tentang Wilayah NKRI menggunakan huruf terakhir!</p>
+    </header>
+
+    <div class="score-bar">
+        <div class="score-item">
+            <div class="val" id="chain-count">0</div>
+            <div class="lbl">Rantai</div>
+        </div>
+        <div class="score-item">
+            <div class="val" id="target-count">8</div>
+            <div class="lbl">Target</div>
+        </div>
+        <div class="score-item">
+            <div class="val" id="score-val">0</div>
+            <div class="lbl">Skor</div>
+        </div>
+    </div>
+
+    <div class="rules-card">
+        <h3>📖 Cara Bermain</h3>
+        <p>Sambung kata dengan menggunakan <strong>huruf terakhir</strong> dari kata sebelumnya sebagai <strong>huruf pertama</strong> kata berikutnya. Semua kata harus berhubungan dengan materi Wilayah NKRI! Pilih dari bank kata atau ketik sendiri.</p>
+    </div>
+
+    <div class="current-word-section">
+        <div class="label">Kata Sekarang</div>
+        <div class="current-word" id="current-word">—</div>
+        <div class="start-letter" id="start-letter-hint"></div>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-label">
+            <span>📈 Progress Rantai Kata</span>
+            <span id="progress-text">0 / 8</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="chain-display">
+        <h3>🔗 Rantai Kata</h3>
+        <div class="chain-words" id="chain-words">
+            <span style="color: var(--muted); font-size:14px; font-style:italic;">Belum ada kata...</span>
+        </div>
+    </div>
+
+    <div class="input-section">
+        <div class="input-row">
+            <input type="text" id="word-input" placeholder="Ketik kata..." maxlength="20"
+                autocomplete="off" autocorrect="off" spellcheck="false" />
+            <button class="btn-submit" onclick="submitWord()" id="btn-submit">Masukkan →</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="wordbank-section">
+        <h3>💡 Bank Kata (Klik untuk pilih)</h3>
+        <div class="word-bank" id="word-bank"></div>
+    </div>
+
+    <button class="btn-reset" onclick="initGame()">🔄 Mulai Ulang</button>
+</div>
+
+<div class="win-overlay" id="win-overlay">
+    <div class="win-box">
+        <div class="win-emoji">🎉</div>
+        <div class="win-title">KEREN BANGET!</div>
+        <div class="win-msg">Kamu berhasil menyambung <strong id="win-chain-count"></strong> kata tentang Wilayah NKRI!</div>
+        <div class="chain-display-win">
+            <p id="win-chain-display"></p>
+        </div>
+        <button class="btn-submit-large" onclick="initGame(); document.getElementById('win-overlay').classList.remove('show')">🎮 Main Lagi</button>
+    </div>
+</div>
+
+<script>
+// All valid words related to NKRI material
+const ALL_WORDS = [
+    'DESA', 'ADAT', 'TANAH', 'HARI', 'INDONESIA', 'ADIL', 'LURAH',
+    'HUKUM', 'MUSYAWARAH', 'HUTAN', 'NEGARA', 'ALAM', 'MASYARAKAT',
+    'TERTIB', 'BERSATU', 'UNDANG', 'GUBERNUR', 'RUKUN', 'NKRI',
+    'IBUKOTA', 'AGAMA', 'AMANAT', 'TATA', 'ATURAN', 'NASIONAL',
+    'LAUT', 'TUHAN', 'NUSANTARA', 'ABDI', 'IBU', 'USAHA',
+    'BUPATI', 'INISIATIF', 'FAKTA', 'ANGGOTA', 'AMAN',
+    'NELAYAN', 'NURANI', 'IKRAR', 'RAKYAT', 'TUGAS',
+    'SABANG', 'GARUDA', 'AKHLAK', 'KECAMATAN', 'NOMOR',
+    'RASA', 'ANCAMAN', 'MERAUKE', 'EKONOMI', 'IRISAN',
+    'NAMA', 'AKSI', 'INSPIRASI', 'IDEOLOGI', 'INSAN',
+    'NUSANTARA', 'ADAB', 'BANGGA', 'ARTI', 'ILMU', 'UNJUK',
+    'KOTA', 'AGUNG', 'GENERASI', 'INTEGRASI', 'IRIGASI',
+    'SEMBOYAN', 'NIAT', 'TANGGUNG', 'GOTONG', 'GAYA',
+    'ASLI', 'INGAT', 'TEKNOLOGI', 'ILMIAH', 'HIDUP',
+    'BHINEKA', 'ANTAR', 'RAGA', 'AKRAB', 'BUDAYA', 'AKUR',
+    'RAJIN', 'NILAI', 'INSYAF', 'FISKAL', 'LENGKAP',
+    'PRESIDEN', 'NUSANTARA', 'NASIB', 'BUDI', 'ISTANA',
+    'ABADI', 'IBADAH', 'HAKIM', 'MANFAAT', 'TIMUR',
+    'RELA', 'AMAN', 'NAIK', 'KEAMANAN', 'NAUNGAN',
+    'WILAYAH', 'HIDUP', 'DALAM', 'MASUKAN', 'NASIONAL',
+    'LOKAL', 'LUAR', 'RAGAM', 'MERDEKA', 'AMAN', 'NOMOR',
+    'RESPEK', 'KEBANGSAAN', 'NALAR', 'RAGAM', 'MARITIM',
+    'MODAL', 'LANGSUNG', 'GERAKAN', 'NYATA', 'ALAM',
+    'MENTERI', 'INSTANSI', 'BERSAMA', 'ANAK', 'KAMPUNG',
+    'GUYUB', 'BHAKTI', 'IKATAN', 'NORMA', 'ANDIL',
+];
+
+// Bank words to show (curated, related to material)
+const BANK_WORDS = [
+    'DESA', 'KELURAHAN', 'NKRI', 'LURAH', 'HUKUM',
+    'MERAUKE', 'NEGARA', 'ALAM', 'MASYARAKAT', 'TERTIB',
+    'GUBERNUR', 'RUKUN', 'IBUKOTA', 'ADAT', 'TANAH',
+    'BUPATI', 'INDONESIA', 'ADIL', 'LAUT', 'TUHAN',
+    'SABANG', 'GARUDA', 'ABDI', 'IBU', 'ANAK',
+    'KECAMATAN', 'NASIONAL', 'LOKAL', 'MANFAAT', 'TIMUR',
+    'PRESIDEN', 'NUSANTARA', 'AMANAT', 'TATA', 'ATURAN',
+    'BHINEKA', 'ANTAR', 'RAGA', 'BUDAYA', 'AKUR',
+    'WILAYAH', 'HIDUP', 'PROVINSI', 'SEMBOYAN', 'GOTONG',
+    'RAGAM', 'MERDEKA', 'KEBANGSAAN', 'MODAL', 'GUYUB',
+    'KOTA', 'AGUNG', 'INTEGRASI', 'UNJUK', 'KAMPUNG',
+    'BAKTI', 'IKATAN', 'NORMA', 'ANDIL', 'NETRAL',
+];
+
+const TARGET = 8;
+let chain = [];
+let usedWords = new Set();
+let score = 0;
+let validWords = new Set(ALL_WORDS.concat(BANK_WORDS));
+
+function initGame() {
+    chain = ['DESA'];
+    usedWords = new Set(['DESA']);
+    score = 0;
+    document.getElementById('word-input').value = '';
+    setFeedback('', '');
+    updateDisplay();
+    renderWordBank();
+    document.getElementById('score-val').textContent = 0;
+}
+
+function getLastLetter(word) {
+    return word[word.length - 1];
+}
+
+function submitWord() {
+    const input = document.getElementById('word-input');
+    const word = input.value.trim().toUpperCase();
+
+    if (!word) {
+        setFeedback('⚠️ Masukkan kata dulu ya!', 'err');
+        return;
+    }
+
+    const err = validateWord(word);
+    if (err) {
+        setFeedback(err, 'err');
+        input.classList.add('error');
+        setTimeout(() => input.classList.remove('error'), 500);
+        return;
+    }
+
+    addWord(word);
+    input.value = '';
+    input.focus();
+}
+
+function validateWord(word) {
+    if (word.length < 2) return '⚠️ Kata harus minimal 2 huruf!';
+    if (usedWords.has(word)) return `⚠️ Kata "${word}" sudah dipakai!`;
+
+    if (chain.length > 0) {
+        const lastWord = chain[chain.length - 1];
+        const lastLetter = getLastLetter(lastWord);
+        if (word[0] !== lastLetter) {
+            return `⚠️ Kata harus diawali huruf "${lastLetter}"! Kata terakhir: "${lastWord}"`;
+        }
+    }
+
+    if (!validWords.has(word)) {
+        // Be lenient - allow any Indonesian word that fits
+        // Just check it's all letters
+        if (!/^[A-Z]+$/.test(word)) return '⚠️ Gunakan huruf alfabet saja!';
+    }
+
+    return null;
+}
+
+function addWord(word) {
+    chain.push(word);
+    usedWords.add(word);
+    score += word.length * 10;
+    document.getElementById('score-val').textContent = score;
+    markBankWordUsed(word);
+    updateDisplay();
+    setFeedback(`✅ "${word}" diterima! +${word.length * 10} poin`, 'ok');
+
+    if (chain.length >= TARGET + 1) {  // +1 for the starter word
+        setTimeout(showWin, 600);
+    }
+}
+
+function updateDisplay() {
+    const lastWord = chain[chain.length - 1];
+    const chainCount = Math.max(0, chain.length - 1);
+
+    document.getElementById('current-word').textContent = lastWord || '—';
+    document.getElementById('chain-count').textContent = chainCount;
+
+    if (lastWord) {
+        const next = getLastLetter(lastWord);
+        document.getElementById('start-letter-hint').innerHTML =
+            `Kata selanjutnya harus diawali: <span>${next}</span>`;
+    } else {
+        document.getElementById('start-letter-hint').textContent = '';
+    }
+
+    // Progress
+    const progress = Math.min(chainCount / TARGET * 100, 100);
+    document.getElementById('progress-fill').style.width = progress + '%';
+    document.getElementById('progress-text').textContent = `${chainCount} / ${TARGET}`;
+
+    // Chain display
+    const chainContainer = document.getElementById('chain-words');
+    if (chain.length === 0) {
+        chainContainer.innerHTML = '<span style="color: var(--muted); font-size:14px; font-style:italic;">Belum ada kata...</span>';
+        return;
+    }
+
+    chainContainer.innerHTML = '';
+    chain.forEach((word, i) => {
+        if (i > 0) {
+            const arrow = document.createElement('span');
+            arrow.className = 'chain-arrow';
+            arrow.textContent = '→';
+            chainContainer.appendChild(arrow);
+        }
+
+        const chip = document.createElement('div');
+        chip.className = 'chain-word' + (i === chain.length - 1 ? ' highlight-last' : '');
+
+        if (i < chain.length - 1) {
+            // Highlight last letter
+            const letterHighlight = word[word.length - 1];
+            chip.innerHTML = `${word.slice(0, -1)}<span style="color:var(--accent);text-decoration:underline;">${letterHighlight}</span>`;
+        } else {
+            chip.textContent = word;
+        }
+        chainContainer.appendChild(chip);
+    });
+
+    // Scroll to end
+    chainContainer.scrollLeft = chainContainer.scrollWidth;
+}
+
+function renderWordBank() {
+    const container = document.getElementById('word-bank');
+    container.innerHTML = '';
+    BANK_WORDS.forEach(word => {
+        const btn = document.createElement('button');
+        btn.className = 'bank-word' + (usedWords.has(word) ? ' used' : '');
+        btn.textContent = word;
+        btn.id = `bank-${word}`;
+        btn.addEventListener('click', () => {
+            document.getElementById('word-input').value = word;
+            document.getElementById('word-input').focus();
+        });
+        container.appendChild(btn);
+    });
+}
+
+function markBankWordUsed(word) {
+    const btn = document.getElementById(`bank-${word}`);
+    if (btn) btn.classList.add('used');
+}
+
+function setFeedback(msg, type) {
+    const fb = document.getElementById('feedback');
+    fb.textContent = msg;
+    fb.className = 'feedback ' + type;
+}
+
+function showWin() {
+    const chainCount = chain.length - 1;
+    document.getElementById('win-chain-count').textContent = chainCount + ' kata';
+    document.getElementById('win-chain-display').textContent = chain.join(' → ');
+    spawnConfetti();
+    document.getElementById('win-overlay').classList.add('show');
+}
+
+function spawnConfetti() {
+    const colors = ['#00b894','#fdcb6e','#6c5ce7','#e17055','#fd79a8','#00cec9'];
+    for (let i = 0; i < 60; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        el.style.animationDelay = Math.random() * 2 + 's';
+        el.style.width = el.style.height = (Math.random() * 10 + 5) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 5000);
+    }
+}
+
+// Enter key submit
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('word-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submitWord();
+    });
+});
+
+initGame();
+</script>
+</body>
+</html>

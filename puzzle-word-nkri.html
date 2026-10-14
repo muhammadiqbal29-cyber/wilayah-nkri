@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Kata - Wilayah NKRI | Kelas 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #00b894;
+            --accent: #fdcb6e;
+            --danger: #e17055;
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --card2: #0f3460;
+            --text: #eaeaea;
+            --found: #00b894;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            background: linear-gradient(135deg, var(--primary), #a29bfe);
+            border-radius: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(108,92,231,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🔍';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.08;
+            right: -20px;
+            top: -10px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            color: rgba(255,255,255,0.85);
+            font-size: 15px;
+            margin-top: 6px;
+            font-weight: 700;
+        }
+
+        .badge-kelas {
+            display: inline-block;
+            background: var(--accent);
+            color: #333;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .score-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card);
+            padding: 16px 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 2px solid var(--card2);
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-item .val {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--accent);
+        }
+
+        .score-item .lbl {
+            font-size: 12px;
+            color: #aaa;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .grid-wrapper {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 2px solid var(--card2);
+            overflow-x: auto;
+        }
+
+        #word-grid {
+            display: inline-grid;
+            gap: 4px;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .cell {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            border-radius: 8px;
+            background: var(--card2);
+            color: var(--text);
+            transition: background 0.2s, transform 0.1s, color 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .cell.selected {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.1);
+            border-color: #a29bfe;
+            z-index: 2;
+        }
+
+        .cell.found {
+            background: var(--found);
+            color: #fff;
+            border-color: #00d2b0;
+        }
+
+        .words-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .word-chip {
+            background: var(--card);
+            border: 2px solid var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 14px;
+            color: #a29bfe;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .word-chip.found {
+            background: var(--found);
+            border-color: var(--found);
+            color: #fff;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .hint-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 2px solid var(--card2);
+        }
+
+        .hint-section h3 {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 900;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hint-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .hint-num {
+            background: var(--primary);
+            color: #fff;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .hint-text {
+            color: #ccc;
+            line-height: 1.4;
+        }
+
+        .btn-reset {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), #a29bfe);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            box-shadow: 0 4px 15px rgba(108,92,231,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108,92,231,0.5);
+        }
+
+        .btn-reset:active { transform: translateY(0); }
+
+        .win-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .win-overlay.show { display: flex; }
+
+        .win-box {
+            background: linear-gradient(135deg, var(--card), var(--card2));
+            border-radius: 28px;
+            padding: 40px 30px;
+            border: 3px solid var(--accent);
+            max-width: 350px;
+            width: 100%;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .win-emoji { font-size: 70px; margin-bottom: 15px; }
+
+        .win-title {
+            font-size: 30px;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .win-msg {
+            color: #ccc;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            animation: fall linear forwards;
+            z-index: 99;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .cell { width: 32px; height: 32px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="badge-kelas">🎮 Game 1 dari 3 | Kelas 6 PKn</div>
+        <h1>🔍 Puzzle Kata</h1>
+        <p>Temukan kata-kata tersembunyi seputar Wilayah NKRI!</p>
+    </header>
+
+    <div class="score-bar">
+        <div class="score-item">
+            <div class="val" id="found-count">0</div>
+            <div class="lbl">Ditemukan</div>
+        </div>
+        <div class="score-item">
+            <div class="val" id="total-count">10</div>
+            <div class="lbl">Total Kata</div>
+        </div>
+        <div class="score-item">
+            <div class="val" id="score-val">0</div>
+            <div class="lbl">Skor</div>
+        </div>
+    </div>
+
+    <div class="words-list" id="words-list"></div>
+
+    <div class="grid-wrapper">
+        <div id="word-grid"></div>
+    </div>
+
+    <div class="hint-section">
+        <h3>💡 Petunjuk Kata</h3>
+        <div id="hints-container"></div>
+    </div>
+
+    <button class="btn-reset" onclick="initGame()">🔄 Mulai Ulang</button>
+</div>
+
+<div class="win-overlay" id="win-overlay">
+    <div class="win-box">
+        <div class="win-emoji">🏆</div>
+        <div class="win-title">LUAR BIASA!</div>
+        <div class="win-msg">Kamu berhasil menemukan semua kata tersembunyi! Kamu benar-benar paham materi Wilayah NKRI!</div>
+        <button class="btn-reset" onclick="initGame(); document.getElementById('win-overlay').classList.remove('show')">🎮 Main Lagi</button>
+    </div>
+</div>
+
+<script>
+const WORDS_DATA = [
+    { word: 'GUBERNUR', hint: 'Pemimpin wilayah Provinsi' },
+    { word: 'BUPATI', hint: 'Pemimpin wilayah Kabupaten' },
+    { word: 'PRESIDEN', hint: 'Pemimpin Negara Indonesia' },
+    { word: 'PROVINSI', hint: 'Wilayah yang terdiri dari beberapa kabupaten/kota' },
+    { word: 'KECAMATAN', hint: 'Gabungan dari beberapa desa/kelurahan' },
+    { word: 'KELURAHAN', hint: 'Wilayah terkecil yang dipimpin Lurah' },
+    { word: 'NKRI', hint: 'Singkatan nama negara kita' },
+    { word: 'SABANG', hint: 'Ujung Barat Indonesia' },
+    { word: 'MERAUKE', hint: 'Ujung Timur Indonesia' },
+    { word: 'BHINNEKA', hint: 'Semboyan bangsa: ___ Tunggal Ika' },
+];
+
+const GRID_SIZE = 15;
+let grid = [];
+let placed = [];
+let selecting = false;
+let startCell = null;
+let currentSelected = [];
+let foundWords = new Set();
+let score = 0;
+
+const COLORS = ['#6c5ce7','#e17055','#00b894','#fdcb6e','#0984e3','#fd79a8','#a29bfe','#55efc4','#fab1a0','#81ecec'];
+
+function initGame() {
+    grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
+    placed = [];
+    foundWords.clear();
+    selecting = false;
+    startCell = null;
+    currentSelected = [];
+    score = 0;
+    updateScore();
+
+    WORDS_DATA.forEach((wd, idx) => placeWord(wd.word, COLORS[idx]));
+    fillRandom();
+    renderGrid();
+    renderWordList();
+    renderHints();
+}
+
+function placeWord(word, color) {
+    const directions = [
+        [0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]
+    ];
+    let placed_ok = false;
+    let tries = 0;
+    while (!placed_ok && tries < 200) {
+        tries++;
+        const dir = directions[Math.floor(Math.random() * directions.length)];
+        const startR = Math.floor(Math.random() * GRID_SIZE);
+        const startC = Math.floor(Math.random() * GRID_SIZE);
+        const cells = [];
+        let ok = true;
+        for (let i = 0; i < word.length; i++) {
+            const r = startR + dir[0] * i;
+            const c = startC + dir[1] * i;
+            if (r < 0 || r >= GRID_SIZE || c < 0 || c >= GRID_SIZE) { ok = false; break; }
+            if (grid[r][c] !== '' && grid[r][c] !== word[i]) { ok = false; break; }
+            cells.push([r, c]);
+        }
+        if (ok) {
+            cells.forEach(([r, c], i) => { grid[r][c] = word[i]; });
+            placed.push({ word, cells, color, found: false });
+            placed_ok = true;
+        }
+    }
+}
+
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function fillRandom() {
+    for (let r = 0; r < GRID_SIZE; r++)
+        for (let c = 0; c < GRID_SIZE; c++)
+            if (grid[r][c] === '')
+                grid[r][c] = CHARS[Math.floor(Math.random() * CHARS.length)];
+}
+
+function renderGrid() {
+    const container = document.getElementById('word-grid');
+    container.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 38px)`;
+    container.innerHTML = '';
+
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.textContent = grid[r][c];
+            cell.dataset.r = r;
+            cell.dataset.c = c;
+            cell.id = `cell-${r}-${c}`;
+            container.appendChild(cell);
+        }
+    }
+
+    container.addEventListener('mousedown', onStart);
+    container.addEventListener('mouseover', onMove);
+    container.addEventListener('mouseup', onEnd);
+    container.addEventListener('touchstart', onTouchStart, { passive: false });
+    container.addEventListener('touchmove', onTouchMove, { passive: false });
+    container.addEventListener('touchend', onEnd);
+
+    refreshFoundColors();
+}
+
+function getCellFromEvent(e) {
+    let target = e.target;
+    if (e.touches) {
+        const t = e.touches[0];
+        target = document.elementFromPoint(t.clientX, t.clientY);
+    }
+    if (!target || !target.classList.contains('cell')) return null;
+    return target;
+}
+
+function onStart(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    const cell = getCellFromEvent(e);
+    if (!cell) return;
+    selecting = true;
+    startCell = cell;
+    currentSelected = [cell];
+    clearSelection();
+    cell.classList.add('selected');
+}
+
+function onTouchStart(e) {
+    e.preventDefault();
+    onStart(e);
+}
+
+function onMove(e) {
+    if (!selecting) return;
+    const cell = getCellFromEvent(e);
+    if (!cell || !startCell) return;
+    const r1 = +startCell.dataset.r, c1 = +startCell.dataset.c;
+    const r2 = +cell.dataset.r, c2 = +cell.dataset.c;
+    const dr = r2 - r1, dc = c2 - c1;
+    const len = Math.max(Math.abs(dr), Math.abs(dc));
+    if (len === 0) return;
+    const stepR = dr === 0 ? 0 : dr / Math.abs(dr);
+    const stepC = dc === 0 ? 0 : dc / Math.abs(dc);
+    if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return;
+
+    clearSelection();
+    currentSelected = [];
+    for (let i = 0; i <= len; i++) {
+        const nr = r1 + stepR * i, nc = c1 + stepC * i;
+        const nc2 = document.getElementById(`cell-${nr}-${nc}`);
+        if (nc2) {
+            nc2.classList.add('selected');
+            currentSelected.push(nc2);
+        }
+    }
+}
+
+function onTouchMove(e) {
+    e.preventDefault();
+    onMove(e);
+}
+
+function onEnd() {
+    if (!selecting) return;
+    selecting = false;
+    checkWord();
+    clearSelection();
+    startCell = null;
+    currentSelected = [];
+}
+
+function clearSelection() {
+    document.querySelectorAll('.cell.selected').forEach(c => c.classList.remove('selected'));
+}
+
+function checkWord() {
+    const selected = currentSelected.map(c => ({ r: +c.dataset.r, c: +c.dataset.c }));
+    const selectedWord = selected.map(p => grid[p.r][p.c]).join('');
+    const reversed = selectedWord.split('').reverse().join('');
+
+    for (const p of placed) {
+        if (foundWords.has(p.word)) continue;
+        const match = p.word === selectedWord || p.word === reversed;
+        if (match) {
+            foundWords.add(p.word);
+            p.found = true;
+            score += 100;
+            updateScore();
+            highlightFound(p);
+            markWordChip(p.word);
+            if (foundWords.size === WORDS_DATA.length) setTimeout(showWin, 500);
+            return;
+        }
+    }
+}
+
+function highlightFound(p) {
+    p.cells.forEach(([r, c]) => {
+        const cell = document.getElementById(`cell-${r}-${c}`);
+        if (cell) {
+            cell.classList.add('found');
+            cell.style.background = p.color;
+            cell.style.borderColor = p.color;
+        }
+    });
+}
+
+function refreshFoundColors() {
+    placed.forEach(p => { if (p.found) highlightFound(p); });
+}
+
+function markWordChip(word) {
+    const chip = document.querySelector(`[data-word="${word}"]`);
+    if (chip) chip.classList.add('found');
+}
+
+function renderWordList() {
+    const container = document.getElementById('words-list');
+    container.innerHTML = '';
+    WORDS_DATA.forEach(wd => {
+        const chip = document.createElement('div');
+        chip.className = 'word-chip';
+        chip.textContent = wd.word;
+        chip.dataset.word = wd.word;
+        container.appendChild(chip);
+    });
+    document.getElementById('total-count').textContent = WORDS_DATA.length;
+}
+
+function renderHints() {
+    const container = document.getElementById('hints-container');
+    container.innerHTML = '';
+    WORDS_DATA.forEach((wd, i) => {
+        const div = document.createElement('div');
+        div.className = 'hint-item';
+        div.innerHTML = `<div class="hint-num" style="background:${COLORS[i]}">${i+1}</div>
+            <div class="hint-text"><strong style="color:${COLORS[i]}">${wd.word}</strong>: ${wd.hint}</div>`;
+        container.appendChild(div);
+    });
+}
+
+function updateScore() {
+    document.getElementById('found-count').textContent = foundWords.size;
+    document.getElementById('score-val').textContent = score;
+}
+
+function showWin() {
+    spawnConfetti();
+    document.getElementById('win-overlay').classList.add('show');
+}
+
+function spawnConfetti() {
+    const colors = ['#6c5ce7','#fdcb6e','#00b894','#e17055','#fd79a8','#a29bfe'];
+    for (let i = 0; i < 60; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        el.style.animationDelay = Math.random() * 2 + 's';
+        el.style.width = el.style.height = (Math.random() * 10 + 5) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 5000);
+    }
+}
+
+initGame();
+</script>
+</body>
+</html>
