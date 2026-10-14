@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mengenal Wilayah NKRI — Menu Utama | Kelas 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0f2a;
+            --card: #131936;
+            --card2: #1c2550;
+            --text: #e8eeff;
+            --muted: #7a88c0;
+            --accent: #fdcb6e;
+            --star: #ffd700;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── STARFIELD BACKGROUND ── */
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            animation: twinkle ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.4); }
+        }
+
+        /* ── FLOATING SHAPES ── */
+        .shapes {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.12;
+            animation: floatShape ease-in-out infinite alternate;
+        }
+
+        @keyframes floatShape {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(30px, 20px) scale(1.1); }
+        }
+
+        /* ── WRAPPER ── */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        /* ── HERO HEADER ── */
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .flag-emoji {
+            font-size: 80px;
+            display: block;
+            margin-bottom: 6px;
+            animation: flagWave 3s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes flagWave {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(4deg); }
+        }
+
+        .kelas-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #333;
+            font-size: 13px;
+            font-weight: 900;
+            padding: 5px 18px;
+            border-radius: 30px;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(253,203,110,0.35);
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.25;
+            background: linear-gradient(135deg, #a29bfe, #74b9ff, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .hero .subtitle {
+            font-size: 15px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #6c5ce7, #00b894);
+            border-radius: 4px;
+            margin: 18px auto;
+        }
+
+        /* ── MATERI CARD ── */
+        .section-label {
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--card2);
+        }
+
+        .materi-card {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: linear-gradient(135deg, #1f2b5e, #162048);
+            border: 2px solid #2e3d80;
+            border-radius: 22px;
+            padding: 22px 24px;
+            text-decoration: none;
+            color: var(--text);
+            margin-bottom: 30px;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .materi-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(116,185,255,0.08), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .materi-card:hover::before { opacity: 1; }
+        .materi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(116,185,255,0.2);
+            border-color: #74b9ff;
+        }
+
+        .materi-icon {
+            font-size: 50px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .materi-info h2 {
+            font-size: 19px;
+            font-weight: 900;
+            color: #74b9ff;
+            margin-bottom: 5px;
+        }
+
+        .materi-info p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .materi-arrow {
+            margin-left: auto;
+            font-size: 22px;
+            color: #74b9ff;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .materi-card:hover .materi-arrow { transform: translateX(5px); }
+
+        /* ── GAME CARDS ── */
+        .games-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .game-card {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            border-radius: 22px;
+            padding: 22px 24px;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .game-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover::after { opacity: 1; }
+        .game-card:hover { transform: translateY(-6px); }
+
+        /* Card themes */
+        .game-card.game-1 {
+            background: linear-gradient(135deg, #1e1050, #2d1870);
+            border-color: #6c5ce7;
+            box-shadow: 0 8px 24px rgba(108,92,231,0.2);
+        }
+        .game-card.game-1:hover { box-shadow: 0 16px 40px rgba(108,92,231,0.4); }
+
+        .game-card.game-2 {
+            background: linear-gradient(135deg, #1a0e10, #3a1520);
+            border-color: #e17055;
+            box-shadow: 0 8px 24px rgba(225,112,85,0.2);
+        }
+        .game-card.game-2:hover { box-shadow: 0 16px 40px rgba(225,112,85,0.4); }
+
+        .game-card.game-3 {
+            background: linear-gradient(135deg, #0a1f14, #0d3222);
+            border-color: #00b894;
+            box-shadow: 0 8px 24px rgba(0,184,148,0.2);
+        }
+        .game-card.game-3:hover { box-shadow: 0 16px 40px rgba(0,184,148,0.4); }
+
+        .game-num {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 11px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.25);
+            letter-spacing: 1px;
+        }
+
+        .game-icon {
+            font-size: 52px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+            animation: iconBob 4s ease-in-out infinite;
+        }
+
+        .game-card:nth-child(2) .game-icon { animation-delay: 0.7s; }
+        .game-card:nth-child(3) .game-icon { animation-delay: 1.4s; }
+
+        @keyframes iconBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .game-info { flex: 1; }
+
+        .game-tag {
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
+
+        .game-card.game-1 .game-tag { color: #a29bfe; }
+        .game-card.game-2 .game-tag { color: #fab1a0; }
+        .game-card.game-3 .game-tag { color: #55efc4; }
+
+        .game-info h2 {
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .game-card.game-1 .game-info h2 { color: #a29bfe; }
+        .game-card.game-2 .game-info h2 { color: #fab1a0; }
+        .game-card.game-3 .game-info h2 { color: #55efc4; }
+
+        .game-info p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+        }
+
+        .game-stars {
+            margin-top: 8px;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .game-play-btn {
+            flex-shrink: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .game-card.game-1 .game-play-btn { background: rgba(108,92,231,0.3); color: #a29bfe; }
+        .game-card.game-2 .game-play-btn { background: rgba(225,112,85,0.3); color: #fab1a0; }
+        .game-card.game-3 .game-play-btn { background: rgba(0,184,148,0.3); color: #55efc4; }
+
+        .game-card:hover .game-play-btn { transform: scale(1.2) rotate(15deg); }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--card);
+            border-radius: 20px;
+            border: 1px solid var(--card2);
+        }
+
+        .footer .logo { font-size: 30px; margin-bottom: 6px; }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 700;
+            line-height: 1.7;
+        }
+
+        .footer strong { color: var(--accent); }
+
+        /* ── PROGRESS DOTS ── */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px 0 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--card2);
+            transition: all 0.3s;
+        }
+
+        .dot.active { background: var(--accent); transform: scale(1.3); }
+
+        /* ── PULSE RING EFFECT ON HOVER ── */
+        .game-card:hover .game-icon::after {
+            content: '';
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 24px; }
+            .game-card { padding: 18px; }
+            .game-icon { font-size: 40px; }
+            .game-info h2 { font-size: 17px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Starfield -->
+<div class="stars" id="stars"></div>
+
+<!-- Floating shapes -->
+<div class="shapes">
+    <div class="shape" style="width:300px;height:300px;background:#6c5ce7;top:-100px;left:-100px;animation-duration:8s;"></div>
+    <div class="shape" style="width:250px;height:250px;background:#00b894;bottom:-80px;right:-80px;animation-duration:10s;animation-delay:2s;"></div>
+    <div class="shape" style="width:200px;height:200px;background:#e17055;top:50%;left:50%;animation-duration:12s;animation-delay:4s;"></div>
+</div>
+
+<div class="wrapper">
+
+    <!-- HERO -->
+    <div class="hero">
+        <span class="flag-emoji">🇮🇩</span>
+        <div class="kelas-badge">📚 PKn · Kelas 6 · Imam Nawawi</div>
+        <h1>Mengenal<br>Wilayah NKRI</h1>
+        <div class="subtitle">Dari Desa sampai Indonesia — Belajar & Bermain!</div>
+        <div class="divider"></div>
+    </div>
+
+    <!-- MATERI -->
+    <div class="section-label">📖 Materi Bacaan</div>
+    <a class="materi-card" href="materi-wilayah-nkri.html">
+        <div class="materi-icon">📘</div>
+        <div class="materi-info">
+            <h2>Baca Materi Dulu!</h2>
+            <p>Pelajari materi lengkap tentang Wilayah NKRI — dari Desa, Kecamatan, Kabupaten, Provinsi, hingga NKRI. Wajib dibaca sebelum bermain!</p>
+        </div>
+        <div class="materi-arrow">›</div>
+    </a>
+
+    <!-- GAMES -->
+    <div class="section-label">🎮 Pilih Game</div>
+    <div class="games-grid">
+
+        <!-- Game 1: Puzzle Kata -->
+        <a class="game-card game-1" href="puzzle-word-nkri.html">
+            <div class="game-num">Game 1 / 2</div>
+            <div class="game-icon">🔍</div>
+            <div class="game-info">
+                <div class="game-tag">Puzzle · Word Search</div>
+                <h2>Puzzle Kata</h2>
+                <p>Temukan 10 kata tersembunyi di dalam grid huruf! Drag atau swipe untuk memilih.</p>
+                <div class="game-stars">⭐⭐⭐</div>
+            </div>
+            <div class="game-play-btn">▶</div>
+        </a>
+
+
+        <!-- Game 2: Sambung Kata -->
+        <a class="game-card game-3" href="sambung-kata-nkri.html">
+            <div class="game-num">Game 2 / 2</div>
+            <div class="game-icon">🔗</div>
+            <div class="game-info">
+                <div class="game-tag">Kata · Word Chain</div>
+                <h2>Sambung Kata</h2>
+                <p>Sambung 8 kata bertema NKRI! Huruf terakhir menjadi huruf pertama kata berikutnya.</p>
+                <div class="game-stars">⭐⭐⭐</div>
+            </div>
+            <div class="game-play-btn">▶</div>
+        </a>
+
+    </div>
+
+    <!-- PROGRESS DOTS (decorative) -->
+    <div class="progress-dots">
+        <div class="dot active" id="dot-1"></div>
+        <div class="dot" id="dot-2"></div>
+        <div class="dot" id="dot-3"></div>
+        <div class="dot" id="dot-4"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="logo">🦅</div>
+        <p>
+            <strong>Bhinneka Tunggal Ika</strong><br>
+            Berbeda-beda tetapi tetap satu jua 🇮🇩<br>
+            <span style="font-size:12px; opacity:0.6;">Materi PKn Kelas VI · Semester 1 · 2026/2027</span>
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // Generate stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 3 + 1;
+        star.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            top: ${Math.random() * 100}%;
+            left: ${Math.random() * 100}%;
+            animation-duration: ${Math.random() * 3 + 2}s;
+            animation-delay: ${Math.random() * 4}s;
+        `;
+        starsContainer.appendChild(star);
+    }
+
+    // Animate progress dots
+    const dots = [
+        document.getElementById('dot-1'),
+        document.getElementById('dot-2'),
+        document.getElementById('dot-3'),
+        document.getElementById('dot-4'),
+    ];
+    let dotIdx = 0;
+    setInterval(() => {
+        dots.forEach(d => d.classList.remove('active'));
+        dotIdx = (dotIdx + 1) % dots.length;
+        dots[dotIdx].classList.add('active');
+    }, 1200);
+
+    // Ripple effect on card click
+    document.querySelectorAll('.game-card, .materi-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.15);
+                width: 10px; height: 10px;
+                top: ${e.clientY - rect.top - 5}px;
+                left: ${e.clientX - rect.left - 5}px;
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 700);
+        });
+    });
+
+    // Inject ripple keyframe
+    const style = document.createElement('style');
+    style.textContent = `@keyframes ripple { to { transform: scale(30); opacity: 0; } }`;
+    document.head.appendChild(style);
+</script>
+</body>
+</html>
